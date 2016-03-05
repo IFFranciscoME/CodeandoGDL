@@ -1,0 +1,401 @@
+
+\documentclass{IFFranciscoME}
+\usepackage{tikz}
+\usetikzlibrary{mindmap,shadows}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{ragged2e}
+\usepackage{etoolbox}
+\usepackage{subcaption}
+
+% Information boxes
+\newcommand*{\info}[4][16.3]{%
+  \node [ annotation, #3, scale=0.85, text width = #1em,
+          inner sep = 2mm ] at (#2) {%
+  \list{$\bullet$}{\topsep=0pt\itemsep=0pt\parsep=0pt
+    \parskip=0pt\labelwidth=8pt\leftmargin=8pt
+    \itemindent=0pt\labelsep=2pt}%
+    #4
+  \endlist
+  };
+}
+
+\title[Open Data Day]{ConoceR para CompartiR}
+\subtitle{Fuentes de Informaci\'on Abierta y Visualizaciones con R.}
+
+\author{%
+    \textbf{Francisco Mu\~noz Elguez\'abal} \\
+    Ingenier\'ia Financiera - ITESO\\
+    \textcolor{blue}{\texttt{if.francisco.me@gmail.com}}}
+
+\institute[ITESO]
+{  }
+
+\date{5.Marzo.2016}
+
+<<Base, eval=TRUE, echo=FALSE, include=FALSE>>=
+pkg <- c("base","downloader","grid","gtable","ggplot2","httr","jsonlite","knitr",
+         "lubridate","Quandl","RCurl","reshape2","scales","tseries","timeDate",
+         "twitteR","tm","xts","xlsx","zoo")
+
+inst <- pkg %in% installed.packages()
+if(length(pkg[!inst]) > 0) install.packages(pkg[!inst])
+instpackages <- lapply(pkg, library, character.only=TRUE)
+
+Quandl.api_key("Xx4a2mg8m1dUifc-y-D1")
+@
+
+\begin{document}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- Portada ---------------------------------------------------------- Lamina (1) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{}
+  \titlepage
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- ----------------------------------------------------- Proyecto PAP Lamina (2) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Mapa de contenidos}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.36]{MindMap.pdf}
+\end{figure}
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- Historia --------------------------------------------------------- Lamina (1) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Definici\'on y Versiones}
+
+\begin{block}{Definici\'on de CRAN}
+\textit{R is a language and environment for \textbf{statistical computing and graphics}. 
+R was created by \textbf{R}oss Ihaka and \textbf{R}obert Gentleman at the University of
+Auckland, New Zealand. It is a \textbf{GNU project} which is similar to \textbf{S language}
+and environment which was developed at \textbf{Bell Laboratories} (formerly AT\&T, 
+now Lucent Technologies) by John Chambers and colleagues.}
+\end{block}
+
+\begin{block}{Actualmente}
+
+\begin{itemize}
+  \item MultiPlataforma: \textbf{Windows, MacOS, Linux}
+  \item Editor: \textbf{RStudio 0.99.891}
+  \item \'Ultima Versi\'on: \textbf{3.2.4}
+  \item Paquetes existentes: \textbf{8041}
+\end{itemize}
+
+\end{block}
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- Historia --------------------------------------------------------- Lamina (1) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Fuentes de Informaci\'on y Recursos}
+
+\begin{itemize}
+
+  \item C.R.A.N (\textbf{C}omprehensive \textbf{R} \textbf{A}rchive \textbf{N}etwork) \\
+  \textcolor{blue}{ \href{https://cran.r-project.org}
+  {www.cran.r-project.org}}
+  
+  \item M.R.A.N (\textbf{M}icrosoft \textbf{R} \textbf{A}pplication \textbf{N}etwork) \\
+  \textcolor{blue}{\href{https://mran.revolutionanalytics.com}
+  {www.mran.revolutionanalytics.com}}
+  
+  \item RBloggers: Blog de Blogs \\
+  \textcolor{blue}{\href{http://www.r-bloggers.com/}
+  {www.r-bloggers.com/}}
+
+  \item RDocumentation: Documentaci\'on y busqueda de funciones \\
+  \textcolor{blue}{\href{www.rdocumentation.com}{www.rdocumentation.com}}
+  
+  \item RStudio: Info y \textit{Cheatsheets} del Editor \\
+  \textcolor{blue}{\href{https://www.rstudio.com/resources/cheatsheets/}
+  {www.rstudio.com/resources/cheatsheets/}}
+  
+  \item RPubs: Publicaci\'on de documentos con Texto + C\'odigo \\
+  \textcolor{blue}{\href{www.rpubs.com}
+  {www.rpubs.com}}
+  
+  \item IDRE: \textbf{I}nstitute for \textbf{D}igital \textbf{R}esearch and 
+  \textbf{E}ducation \textit{UCLA} \\ 
+  \textcolor{blue}{\href{http://www.ats.ucla.edu/stat/r}
+  {www.ats.ucla.edu/stat/r}}
+  
+\end{itemize}
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- Historia --------------------------------------------------------- Lamina (1) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{¿ Quien utiliza R ?}
+
+
+Todos estos
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- -------------------------- Herramientas Computacionales Utilizadas Lamina (6) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{GITHUB para control de versiones}
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1.1\linewidth]{figure/GitHubLINUX.png}
+  \caption{GitHub en Terminal}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.85\linewidth]{figure/GitHubWEB.png}
+  \caption{GitHub en WEB}
+\end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.34]{figure/SetupGit.png}
+\end{figure}
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- -------------------------- Herramientas Computacionales Utilizadas Lamina (6) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Aplicaciones de muestra}
+
+Miner\'ia de texto b\'asica con TwitteR
+Visualizaci\'on b\'asica de Imp\'acto econ\'omico de tipo de cambio
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- -------------------------- Herramientas Computacionales Utilizadas Lamina (6) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Visualizando TwitteR I}
+
+<<TwitterI, eval=TRUE, echo=FALSE, include=FALSE>>=
+Tokens <- read.csv("Tokens.txt", header = F)
+
+Llave1  <- as.character(Tokens[2,1])
+Llave2  <- as.character(Tokens[2,2])
+Llave3  <- as.character(Tokens[2,3]) 
+Llave4  <- as.character(Tokens[2,4])
+
+setup_twitter_oauth(Llave1,Llave2,Llave3,Llave4)
+@
+
+<<TwitterII, eval=TRUE, echo=FALSE, include=FALSE>>=
+# Solicitar primeros 100 tweets del timeline del usuario banxico
+PruebaTweets <- userTimeline("banxico", n = 100)
+
+# Conversión de objetos para mejor manejabilidad
+df.tweets <- twListToDF(PruebaTweets)
+
+# Seleccion de las columnas de interes
+df.tweetsAn <- data.frame(df.tweets$created, df.tweets$favoriteCount,
+                          df.tweets$retweetCount)
+@
+
+<<TwitterIII, eval=TRUE, echo=FALSE, include=FALSE>>=
+Grafica1 <- ggplot(df.tweetsAn, aes(df.tweetsAn[,2:3])) + 
+  geom_histogram(aes(df.tweetsAn[,2]), colour="black", fill = "red",
+                 alpha = .7, bins = 36) + 
+  geom_histogram(aes(df.tweetsAn[,3]), colour="black", fill = "orange",
+                 alpha = .7, bins = 36) +
+  labs(title = "Histograma Freq", y = "Cantidad", x = "Frecuencia Favorito/Retweet")
+
+ggInfoHist1 <- data.frame(ggplot_build(Grafica1)$data[[1]][,3],
+                           ggplot_build(Grafica1)$data[[1]][,2])
+ggInfoHist1 <- ggInfoHist1[which(ggInfoHist1[,2] != 0),]
+ggInfoHist2 <- data.frame(ggplot_build(Grafica1)$data[[2]][,3],
+                           ggplot_build(Grafica1)$data[[2]][,2])
+ggInfoHist2 <- ggInfoHist2[which(ggInfoHist2[,2] != 0),]
+DivisionesY <- unique(sort(c(ggInfoHist1[,2],ggInfoHist2[,2])))
+
+Grafica2 <- Grafica1 +
+  theme(
+  panel.grid.minor.y = element_line(size = .5, color = "dark grey", linetype = 2),
+  panel.grid.major.y = element_line(size = .5, color = "dark grey", linetype = 2),
+  panel.grid.minor.x = element_line(size = .5, color = "dark grey", linetype = 2),
+  panel.grid.major.x = element_line(size = .5, color = "dark grey", linetype = 2),
+  axis.text.x  = element_text(colour = "black",size = 10, hjust = .5,vjust = 0),
+  axis.text.y  = element_text(colour = "black",size = 10, hjust = .5,vjust = 0),
+  axis.title.x = element_text(colour = "black",size = 14,hjust = .5,vjust = 0),
+  axis.title.y = element_text(colour = "black",size = 14,hjust = .5,vjust = 1),
+  title = element_text(colour = "black", size = 14, hjust = 1, vjust = 0.8),
+  panel.border = element_rect(linetype = 1, colour = "dark grey", fill = NA)) +
+  scale_y_discrete(breaks = DivisionesY) 
+
+Grafica3 <- Grafica2 
+Grafica3
+@
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- -------------------------- Herramientas Computacionales Utilizadas Lamina (6) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Visualizando TwitteR II}
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- -------------------------- Herramientas Computacionales Utilizadas Lamina (6) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Visualizando TwitteR III}
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- -------------------------- Herramientas Computacionales Utilizadas Lamina (6) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Visualizando Tipo de Cambio I}
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- -------------------------- Herramientas Computacionales Utilizadas Lamina (6) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Visualizando Tipo de Cambio II}
+
+\end{frame}
+
+% -- ----------------------------------------------------------------------------- -- %
+% -- -------------------------- Herramientas Computacionales Utilizadas Lamina (6) -- %
+% -- ----------------------------------------------------------------------------- -- %
+
+\begin{frame}{Visualizando Tipo de Cambio III}
+
+<<Chunk1, eval=TRUE, echo=FALSE, include=FALSE>>=
+
+# Canasta Basica utilizando archivo XLX y paquete XLSX
+CanBas <- read.xlsx("INP_INP20160304124209.XLS", "Niveles")
+CanBas <- CanBas[-c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),c(1,10)]
+
+CanBas[,1] <- as.character(CanBas[,1])
+CanBas[,1] <- as.Date(as.yearmon(CanBas[,1]), format = "%d/%m/%Y")
+CanBas[,2] <- as.numeric(levels(CanBas[,2]))[CanBas[,2]]
+colnames(CanBas) <- c("Fecha","Valor")
+
+# Tipo de Cambio FIX Diario utilizando paquete QUANDL
+UsdMxn <- Quandl("BDM/SF43718", trim_start="1994-07-01", trim_end="2016-02-01")
+UsdMxn <- UsdMxn[sort(order(as.Date(UsdMxn[,1])), decreasing = TRUE),]
+colnames(UsdMxn) <- c("Fecha","Valor")
+
+
+UsdMxnMens <- data.frame(UsdMxn$Fecha[endpoints(UsdMxn$Fecha, "months")],
+                        UsdMxn$Valor[endpoints(UsdMxn$Fecha, "months")])
+CanBasMens <- data.frame(CanBas$Fecha[endpoints(CanBas$Fecha, "months")],
+                        CanBas$Valor[endpoints(CanBas$Fecha, "months")])
+
+XtsCanBasMens <- xts(CanBasMens[,2], order.by = CanBasMens[,1])
+XtsUsdMxnMens <- xts(UsdMxnMens[,2], order.by = UsdMxnMens[,1])
+
+DFDatos <- data.frame(as.POSIXct(CanBasMens[,1]),CanBasMens[,2],UsdMxnMens[,2])
+colnames(DFDatos) <- c("Index","CanBas","UsdMxn")
+@
+
+<<Chunk2, eval=TRUE, echo=FALSE, include=FALSE>>=
+
+Diferencias <- data.frame(DFDatos$Index[-1],diff(DFDatos$CanBas),diff(DFDatos$UsdMxn))
+
+MayoresCanBas <- c()
+DiffCanBas <- tail(sort(Diferencias[,2]), n = 10)
+for(i in 1:length(DiffCanBas)) MayoresCanBas[i] <- which(Diferencias[,2] == DiffCanBas[i])
+
+DiffCanBas <- Diferencias[MayoresCanBas,]
+DiffCanBas[,4] <- "DiffCanBas"
+
+MayoresUsdMxn <- c()
+DiffUsdMxn <- tail(sort(Diferencias[,3]), n = 10)
+for(i in 1:length(DiffUsdMxn)) MayoresUsdMxn[i] <- which(Diferencias[,3] == DiffUsdMxn[i])
+
+DiffUsdMxn <- Diferencias[MayoresUsdMxn,]
+DiffUsdMxn[,4] <- "DiffUsdMxn"
+
+Tema <- function(ColorY)  {
+  temita <- theme(panel.background = element_rect(fill="white"),
+  panel.grid.minor.y = element_line(size = .25, color = "dark grey"),
+  panel.grid.major.y = element_line(size = .25, color = "dark grey"),
+  panel.grid.major.x = NULL,
+  panel.grid.major.x = element_line(size = .75, color = "black"),
+  axis.text.x  = element_text(colour = "black",size = 13, hjust =.5, vjust = 0),
+  axis.text.y  = element_text(colour = ColorY, size = 13, hjust =.5, vjust = 0),
+  axis.title.x = NULL,
+  axis.title.y = NULL,
+  panel.border = element_rect(linetype = 1, colour = "dark grey", fill = NA),
+  panel.background = element_rect(fill = NA))
+  return(temita)  }
+
+p1 <- ggplot(DFDatos, aes(DFDatos$Index, DFDatos$UsdMxn)) + 
+  geom_line(colour = "blue", size = .85) + Tema("blue")   +
+  scale_x_datetime(breaks = date_breaks("2 year"), date_labels = "%m/%Y") +
+  scale_y_continuous(breaks = round(seq(
+  round(min(DFDatos$UsdMxn),2),
+  round(max(DFDatos$UsdMxn),2),
+  (round(max(DFDatos$UsdMxn),2) - round(min(DFDatos$UsdMxn),2))/10),2),
+  labels = comma) + labs(y = NULL, x = NULL) + ggtitle("UsdMxn Vs Canasta Basica") +
+  
+  geom_vline(xintercept=as.numeric(DiffUsdMxn[,1]), linetype = 5, size=.5, colour="blue", alpha = 0.8)
+
+p2 <- ggplot(DFDatos, aes(DFDatos$Index, DFDatos$CanBas)) +
+  geom_line(colour = "red", size = .85) + 
+  Tema("red") %+replace% theme(panel.background = element_rect(fill = NA),
+  axis.text.y  = element_text(colour = "red", size = 12, hjust =.5,vjust = 0),
+  axis.title.y = NULL) +
+      
+  scale_y_continuous(breaks = round(seq(
+  round(min(DFDatos$CanBas),2),
+  round(max(DFDatos$CanBas),2),
+  (round(max(DFDatos$CanBas),2) - round(min(DFDatos$CanBas),2))/10),2),
+  labels = comma) + labs(y = NULL, x = NULL) + ggtitle("UsdMxn Vs Canasta Basica") +
+  
+  geom_vline(xintercept=as.numeric(DiffCanBas[,1]), linetype = 5,size=.5,colour="red",alpha = 0.8)
+
+# -- Extraer gtable
+g1 <- ggplot_gtable(ggplot_build(p1))
+g2 <- ggplot_gtable(ggplot_build(p2))
+
+# -- overlap the panel of 2nd plot on that of 1st plot
+
+pp <- c(subset(g1$layout, name == "panel", se = t:r))
+g  <- gtable_add_grob(g1, g2$grobs[[which(g2$layout$name == "panel")]], pp$t, 
+  pp$l, pp$b, pp$l)
+
+# -- axis tweaks
+ia <- which(g2$layout$name == "axis-l")
+ga <- g2$grobs[[ia]]
+ax <- ga$children[[2]]
+ax$widths <- rev(ax$widths)
+ax$grobs <- rev(ax$grobs)
+ax$grobs[[1]]$x <- ax$grobs[[1]]$x - unit(1, "npc") + unit(0.15, "cm")
+g <- gtable_add_cols(g, g2$widths[g2$layout[ia, ]$l], length(g$widths) - 1)
+g <- gtable_add_grob(g, ax, pp$t, length(g$widths) - 1, pp$b)
+
+# -- draw it
+grid.draw(g)
+@
+
+\end{frame}
+
+\end{document}
